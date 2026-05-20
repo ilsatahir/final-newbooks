@@ -7,6 +7,16 @@
 
   // Wrap the array in $state so the totals below can react to it.
   let transactions = $state(data.transactions);
+  // Track the current active table filter
+  let filterStatus = $state('All');
+
+  // Compute the filtered transactions list dynamically
+  let filteredTransactions = $derived(
+    transactions.filter(t => {
+      if (filterStatus === 'All') return true;
+      return classify(t) === filterStatus;
+    })
+  );
 function classify(t) {
     if (t.credit === 'Revenue') {
       return 'Revenue';
